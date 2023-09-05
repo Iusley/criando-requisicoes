@@ -2,7 +2,7 @@ import { conectaAPI } from "./conectaAPI.js"
 
 const lista = document.querySelector("[data-lista]")
 
-function constroiCard(titulo, descricao, url, imagem) {
+export default function constroiCard(titulo, descricao, url, imagem) {
     const video = document.createElement("li")
     video.className = "videos__item"
     video.innerHTML = `
@@ -20,9 +20,15 @@ function constroiCard(titulo, descricao, url, imagem) {
 }
 
 async function listaVideos() {
+    try {
     const listaApi = await conectaAPI.listaVideos();
     listaApi.forEach(elemento => lista.appendChild
         (constroiCard (elemento.titulo, elemento.descricao, elemento.url, elemento.imagem)))
+    } catch {
+        lista.innerHTML = `
+        <h2 class="Mensagem__titulo">Não foi possível carregar a lista de videos. Banco de Dados não acessível!</h2>
+        `
+    }
 }
 
 listaVideos();
